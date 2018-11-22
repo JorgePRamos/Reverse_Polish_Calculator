@@ -1,12 +1,18 @@
 #!/bin/bash
-# Comparacion del ultimo elemento == PRINT 
-# m[k]== PRINT
-# k-1 almacena el numero de elementos del array en este punto
+#========= UPDATED 09/11/2018====
+#====================================
+#====================================
+#FUNCIONES MATEMATICAS ===========
+#====================================
+#====================================
 
 function raiz(){
     if [[ "$#" -ne 1 ]];then
         echo "Syntax error"
-        #exit
+        exit 1
+    elif [[ "$1" -lt 0 ]]; then 
+        echo "Math error"
+        exit 2
     else 
         echo "sqrt ($1)"|bc
     fi
@@ -14,113 +20,137 @@ function raiz(){
 function mOdulo(){
     if [[ "$#" -ne 2 ]];then
         echo "Syntax error"
-        #exit
-    else 
+        exit 1
+    else  
         echo "$1 % $2"|bc
-        return
     fi
 
+}
+function potencia(){
+     if [[ "$#" -ne 2 ]];then
+        echo "Syntax error"
+        exit 1
+    else  
+        echo "$1 ^ $2"|bc
+    fi
 }
 function factorial (){
     if [[ "$#" -ne 1 ]];then
         echo "Syntax error"
         #exit
     else 
-        if [[ $1 -le 1 ]];then
-        echo 1
+        if [[ $1 -lt 0 ]];then
+            echo "Math error"
+            exit 2
+        elif [[ $1 -le 1 ]];then
+            echo 1
         else
-        
-        echo $(($1 * $(factorial $[$1-1])))
-    fi
+            echo $(($1 * $(factorial $[$1-1])))
+        fi
     fi 
       
 }
 function imprimir(){
     if [[ "$#" -ne 1 ]];then
         echo "Syntax error"
-        #exit
+        exit 1
     else 
         echo $1
     fi
 
 }
-if [[ ${m[((--k))]} != 'PRINT' ]];then 
-    echo 'Error print'
-    #exit 1
-#k almacena ahora el numero de elementos de array (0..k)
-#elif 
-# Proceder con la ejecucion
+function multiplicar(){
+    if [[ "$#" -ne 2 ]];then #atributos deben de ser ==2
+        echo "Syntax error"
+        exit 1
+    else 
+        echo $(($1 * $2))
+    fi
+}
+function  suma(){
+   if [[ "$#" -ne 2 ]];then #atributos deben de ser ==2
+        echo "Syntax error"
+        exit 1
+    else 
+        echo $(($1 + $2))
+    fi
+}
+function  resta(){
+   if [[ "$#" -ne 2 ]];then #atributos deben de ser ==2
+        echo "Syntax error"
+        exit 1
+    else 
+        echo $(($1 - $2))
+    fi
+}
 
-: <<'END'
-if ! [[ "$scale" =~ ^[0-9]+$ ]]
-    then
-        echo "Sorry integers only"
-fi
-
-IDEA RECURSIVIDAD
-funcion argumento
-    swict case
-        -
-        -   
-        -
-        -
-            funcion (argumento -k)
-caso base?? es el return de los numeros??
-return?? llamada a las funciones?
+function  division(){
+   if [[ "$#" -ne 2 ]];then #atributos deben de ser ==2
+        echo "Syntax error"
+        exit 1
+    else 
+        echo $(($1 / $2))
+    fi
+}
 
 
 
 
-END
 
+#====================================
+#====================================
+#RECURSIVIDAD_INUTIL ===========
+#====================================
+#====================================
+
+#if [[ ${m[((--k))]} != 'PRINT' ]];then 
 function operar(){
+
     if [[ "$#" -ne 1 ]];then
         echo "Syntax error"
         #exit
     else 
         if ! [[ "$1" =~ ^[0-9] ]];then
             if [[ "$1" = * ]];then
-                multiplicar `operar "$(pullPila)"`
+                echo $(multiplicar `operar "$(pullPila)"` `operar "$(pullPila)"`)
             elif [[ "$1" = ! ]];then
-                factorial `operar "$(pullPila)"` 
+                echo $(factorial `operar "$(pullPila)"`)
             case "$1" in
                 PRINT)
-                    imprimir `operar "$(pullPila)"` 
+                    echo $(imprimir $(operar $(pullPila))) #Experimento 2
                     ;;
                 +)
-                    suma `operar "$(pullPila)"` `operar "$(pullPila)"`
+                    echo $(suma `operar "$(pullPila)"` `operar "$(pullPila)"`) #Experimento
                     ;;
                 -)
-                    resta `operar "$(pullPila)"` `operar "$(pullPila)"`
+                    echo $( resta `operar "$(pullPila)"` `operar "$(pullPila)"`)
                     ;;
                 /)
-                    division `operar "$(pullPila)"` `operar "$(pullPila)"`
+                    echo $( division `operar "$(pullPila)"` `operar "$(pullPila)"`)
                     ;;
                 MOD)
-                    mOdulo `operar "$(pullPila)"` `operar "$(pullPila)"`
+                    echo $( mOdulo `operar "$(pullPila)"` `operar "$(pullPila)"`)
                     ;;
                 ^)
-                    potencia `operar "$(pullPila)"``operar "$(pullPila)"`
+                    echo $( potencia `operar "$(pullPila)"``operar "$(pullPila)"`)
                     ;;
                 SQRT)
-                    raiz `operar "$(pullPila)"`
+                    echo $( raiz `operar "$(pullPila)"`)
                     ;;
             
                 *)
-                    echo "Syntax error"
+                    echo "Syntax error: $1"
+                    exit 1
                     ;;
             esac
+            
             fi 
         else
-    
-        echo $1
+            echo $1
         fi
     fi
 }
+#====================================
+#====================================
 
 
-
-fi
-
-# 1 Idea Comprobar todo el array antes de calcular
-# 2 idea combrobar antes de cada calculo
